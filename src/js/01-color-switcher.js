@@ -18,7 +18,7 @@ const onClickStart = () => {
     }, 1000);
   }
   btnStart.disabled = true;
-  btnStop.disabled = false;//не обов'язково
+  btnStop.disabled = false; //не обов'язково
 };
 
 const onClickStop = () => {
