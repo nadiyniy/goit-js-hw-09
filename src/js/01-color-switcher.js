@@ -1,33 +1,29 @@
 const btnStart = document.querySelector('button[data-start]');
 const btnStop = document.querySelector('button[data-stop]');
 const body = document.body;
-let isActive = false;
 let interval = null;
+btnStop.disabled = true;
 
-function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215)
+const disabledBtn = (a, b) => {
+  btnStart.disabled = a;
+  btnStop.disabled = b;
+};
+
+const getRandomHexColor = () =>
+  `#${Math.floor(Math.random() * 16777215)
     .toString(16)
     .padStart(6, 0)}`;
-}
 
 const onClickStart = () => {
-  if (!isActive) {
-    isActive = true;
-    interval = setInterval(() => {
-      body.style.backgroundColor = getRandomHexColor();
-    }, 1000);
-  }
-  btnStart.disabled = true;
-  btnStop.disabled = false; //не обов'язково
+  interval = setInterval(() => {
+    body.style.backgroundColor = getRandomHexColor();
+  }, 1000);
+  disabledBtn(true, false);
 };
 
 const onClickStop = () => {
-  if (isActive) {
-    isActive = false;
-    clearInterval(interval);
-    btnStart.disabled = false;
-  }
-  btnStop.disabled = true; //не обов'язково
+  clearInterval(interval);
+  disabledBtn(false, true);
 };
 
 btnStart.addEventListener('click', onClickStart);

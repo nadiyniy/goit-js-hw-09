@@ -59,6 +59,7 @@ function addLeadingZero(value) {
 }
 
 const onClickStart = () => {
+  input.disabled = true;
   isActive = true;
   btnStart.disabled = true;
   const intervalId = setInterval(() => {
