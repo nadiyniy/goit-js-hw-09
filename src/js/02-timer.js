@@ -15,7 +15,6 @@ let userDate = null;
 let isActive = false;
 btnStart.disabled = true;
 
-
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -25,9 +24,9 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] < options.defaultDate) {
       Notiflix.Notify.failure('Please choose a date in the future', {
-        closeButton: true,
-        // useIcon: false,
+        // closeButton: true,
         cssAnimationStyle: 'from-top',
+        timeout: 5000,
       });
     } else {
       if (!isActive) {
@@ -78,11 +77,10 @@ const onClickStart = () => {
       isActive = false;
       btnStart.disabled = false;
       Notiflix.Notify.success('Timer finished', {
-        closeButton: true,
-        // useIcon: false,
+        // closeButton: true,
         cssAnimationStyle: 'from-top',
+        timeout: 5000,
       });
-
     }
   }, 1000);
 };
