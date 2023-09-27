@@ -1,32 +1,38 @@
 import flatpickr from 'flatpickr';
+import Notiflix from 'notiflix';
+
 import 'flatpickr/dist/flatpickr.min.css';
 
 const input = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('button[data-start]');
-const days = document.querySelector('.value[data-days');
-const hours = document.querySelector('.value[data-hours');
-const minutes = document.querySelector('.value[data-minutes');
-const seconds = document.querySelector('.value[data-seconds');
+const daysDisplay = document.querySelector('.value[data-days');
+const hoursDisplay = document.querySelector('.value[data-hours');
+const minutesDisplay = document.querySelector('.value[data-minutes');
+const secondsDisplay = document.querySelector('.value[data-seconds');
+
+let userDate = null;
 
 let isActive = false;
-if (!isActive) {
-  isActive = false;
-  btnStart.disabled = true;
-}
+btnStart.disabled = true;
+
 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
 
+  onClose(selectedDates) {
     if (selectedDates[0] < options.defaultDate) {
-      window.alert('Please choose a date in the future');
+      Notiflix.Notify.failure('Please choose a date in the future', {
+        closeButton: true,
+        // useIcon: false,
+        cssAnimationStyle: 'from-top',
+      });
     } else {
       if (!isActive) {
-        isActive = false;
+        userDate = selectedDates[0];
+        isActive = true;
         btnStart.disabled = false;
       }
     }
@@ -49,6 +55,36 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-const onClickStart = () => {};
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+
+const onClickStart = () => {
+  isActive = true;
+  btnStart.disabled = true;
+  const intervalId = setInterval(() => {
+    const currenTime = new Date();
+    const result = userDate - currenTime;
+
+    const { days, hours, minutes, seconds } = convertMs(result);
+
+    daysDisplay.textContent = addLeadingZero(days);
+    hoursDisplay.textContent = addLeadingZero(hours);
+    minutesDisplay.textContent = addLeadingZero(minutes);
+    secondsDisplay.textContent = addLeadingZero(seconds);
+
+    if (result < 1000) {
+      clearInterval(intervalId);
+      isActive = false;
+      btnStart.disabled = false;
+      Notiflix.Notify.success('Timer finished', {
+        closeButton: true,
+        // useIcon: false,
+        cssAnimationStyle: 'from-top',
+      });
+
+    }
+  }, 1000);
+};
 
 btnStart.addEventListener('click', onClickStart);
